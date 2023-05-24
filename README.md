@@ -344,7 +344,8 @@ Handling non-numeric data involves converting or transforming categorical or qua
     
 Data discretization, also known as binning, is the process of transforming continuous or numerical data into discrete intervals or categories. This can be achieved through various techniques such as equal-width binning (dividing the data into bins of equal width), equal-frequency binning (dividing the data into bins with an equal number of data points), or more advanced methods like clustering-based binning or decision tree-based discretization. Discretization can help simplify data analysis, reduce the impact of outliers, and enable the use of algorithms that require categorical or ordinal data.
     - Convert continuous variables into categorical or ordinal variables through data discretization:
-      ```python
+     
+     ```python
       from sklearn.preprocessing import KBinsDiscretizer
       discretizer = KBinsDiscretizer(n_bins=5, encode='ordinal', strategy='quantile')
       discretized_data = discretizer.fit_transform(data)
