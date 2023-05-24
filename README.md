@@ -1,5 +1,11 @@
 # Data_reprocessing
-# Data Preprocessing Steps
+** I have created a repository that covers approximately 98% of the preprocessing steps for any data, including a brief explanation of each step and example code to demonstrate how it is done.
+
+I would like to emphasize two important points:
+
+- I welcome any feedback or suggestions because my main goal is to assist and help.
+- Some of the techniques included in the repository may not be necessary for certain tasks. For example, in the case of sentiment analysis, it may not be suitable to apply stop word removal because it can remove important negations like "not" which carry significant meaning. It is crucial to understand the data and its characteristics before applying any preprocessing techniques.
+# Data Preprocessing Steps**
 
 This README provides an overview of common data preprocessing steps using Python. Each step is accompanied by an example code snippet.
 
