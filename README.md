@@ -1,4 +1,8 @@
 # Data_reprocessing
+
+1. [NLP](#nlp)
+2. [Computer Vision](#computer-vision)
+
  I have created this repository that covers approximately 98% of the preprocessing steps for any data, including a brief explanation of each step and example code to demonstrate how it is done.
 
 I would like to emphasize two important points:
@@ -8,6 +12,7 @@ I would like to emphasize two important points:
 
 This README provides an overview of common data preprocessing steps using Python. Each step is accompanied by an example code snippet.
 
+## NLP
 ## Steps
 
 1. **Data Collection**:
@@ -347,14 +352,14 @@ Handling non-numeric data involves converting or transforming categorical or qua
 
 34. **Data Discretization**:
     
-Data discretization, also known as binning, is the process of transforming continuous or numerical data into discrete intervals or categories. This can be achieved through various techniques such as equal-width binning (dividing the data into bins of equal width), equal-frequency binning (dividing the data into bins with an equal number of data points), or more advanced methods like clustering-based binning or decision tree-based discretization. Discretization can help simplify data analysis, reduce the impact of outliers, and enable the use of algorithms that require categorical or ordinal data.
-    - Convert continuous variables into categorical or ordinal variables through data discretization:
-     
-     ```python
-      from sklearn.preprocessing import KBinsDiscretizer
-      discretizer = KBinsDiscretizer(n_bins=5, encode='ordinal', strategy='quantile')
-      discretized_data = discretizer.fit_transform(data)
-      ```
+    Data discretization, also known as binning, is the process of transforming continuous or numerical data into discrete intervals or categories. This can be achieved through various techniques such as equal-width binning (dividing the data into bins of equal width), equal-frequency binning (dividing the data into bins with an equal number of data points), or more advanced methods like clustering-based binning or decision tree-based discretization. Discretization can help simplify data analysis, reduce the impact of outliers, and enable the use of algorithms that require categorical or ordinal data.
+      - Convert continuous variables into categorical or ordinal variables through data discretization:
+
+          ```python
+          from sklearn.preprocessing import KBinsDiscretizer
+          discretizer = KBinsDiscretizer(n_bins=5, encode='ordinal', strategy='quantile')
+          discretized_data = discretizer.fit_transform(data)
+          ```
 
 35. **Handling Data Dependencies**:
       Handling data dependencies involves addressing the relationships or dependencies between variables in a dataset to ensure accurate modeling and analysis. This can be done through various techniques, such as feature engineering to create new derived features that capture the dependencies, applying dimensionality reduction techniques to eliminate redundant or highly correlated variables, using specialized models or algorithms that explicitly handle dependencies (e.g., Bayesian networks or Markov models), or incorporating time series analysis methods to capture temporal dependencies in sequential data. Effective handling of data dependencies helps to improve the interpretability, predictive accuracy, and generalizability of the models.
@@ -365,5 +370,445 @@ Data discretization, also known as binning, is the process of transforming conti
       df['lag_2'] = df['target'].shift(2)
       ```
 
+# Computer-Vision
 
+## steps
 
+in this section we will learn about the steps of image processing
+the main need of image processing is to make the image more clear and easy to understand for the machine
+
+![](.images/2023-05-24_16-50.png)
+
+mainly image processing is divided into 2 types:
+**Spatial domain :** in this type we will work on the image itself means we will change the pixels of the image using kernels 
+and
+ **Frequency domain :** in this type we will work on the frequency of the image using fourier transform then we will change the frequency of the image then we will use inverse fourier transform to get the image back
+
+1. **Read The Image**:
+  Read the image means to load the image into the memory of the computer so we can process it
+  - Read an image from a file using OpenCV:
+    ```python
+     import cv2
+     image = cv2.imread('image.jpg')
+     ```
+  - Read an image from a file using PIL:
+    ```python
+    from PIL import Image
+    image = Image.open('image.jpg')
+    ```
+  - use matplotlib to show the image:
+    ```python
+    import matplotlib.pyplot as plt
+    image = plt.imread('image.jpg') # also you can use 
+    plt.imshow(image)
+    plt.show()
+    ```
+  - when you read image using opencv it will be in BGR format so you need to convert it to RGB format:
+    ```python
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    ```
+    ![](.images/BGRvsRGB.png)
+
+2. **Resize The Image**:
+    Resize the image means to change the size of the image to make it smaller or bigger or to change the aspect ratio of the image
+  - Resize an image to a specific width and height:
+    ```python
+    image = cv2.resize(image, (width, height))
+    ```
+  - Resize an image to a specific width and height while maintaining the aspect ratio:
+    ```python
+    image = cv2.resize(image, (width, height), interpolation=cv2.INTER_AREA)
+    ```
+  - Resize an image to a specific width and height while maintaining the aspect ratio and ensuring the image fits within the specified dimensions:
+    ```python
+    image = cv2.resize(image, (width, height), interpolation=cv2.INTER_AREA)
+    ```
+  ![](.images/resize.png)
+
+3. **Grayscale Conversion**:
+    Grayscale conversion refers to converting an image from color to grayscale, which is a single-channel image containing only shades of gray. This can be done by applying a grayscale conversion formula or by using a built-in function in a library like OpenCV.
+  - Convert an image from color to grayscale using a formula:
+    ```python
+    image = 0.299 * image[:, :, 0] + 0.587 * image[:, :, 1] + 0.114 * image[:, :, 2]
+    ```
+    - the formula is based wave length of the color
+    means that the red color has multiple of 0.299 and the green color has multiple of 0.587 and the blue color has multiple of 0.114 , **Image is a matrix of pixels with shape (height, width, channels)**
+  - Convert an image from color to grayscale using OpenCV:
+    ```python
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    ```
+  - Convert an image from color to grayscale using PIL:
+    ```python
+    image = image.convert('L')
+    ```
+  ![](.images/gray.png)
+
+  4. **Binary Thresholding**:
+    Binary thresholding refers to converting an image from grayscale to binary by applying a threshold value to each pixel in the image. This can be done by applying a thresholding formula or by using a built-in function in a library like OpenCV.
+  - Convert an image from grayscale to binary using a formula:
+    ```python
+    image = (image > threshold).astype('uint8') * 255
+    ```
+  - Convert an image from grayscale to binary using OpenCV:
+    ```python
+    _, image = cv2.threshold(image, threshold, 255, cv2.THRESH_BINARY)
+    ```
+  ![](.images/binary.png)
+
+  5. **Smoothing**:
+    Smoothing refers to reducing the noise in an image there are many ways to do that like using gaussian blur or median blur or bilateral filter
+    for example : 
+    we will use **median blur** which is a non-linear filter that replaces each pixel in the image with the median value of its neighboring pixels. This can be done by applying a median blur formula or by using a built-in function in a library like OpenCV.
+
+  - Smooth an image using a formula:
+    ```python
+    image = np.median(image, (kernel_size, kernel_size))
+    ```
+  - Smooth an image using OpenCV:
+    ```python
+    image = cv2.medianBlur(image, kernel_size) # kernel_size must be odd number ex: 3, 5, 7, 9, ...
+    
+    image = cv2.GaussianBlur(image,5) # for example
+    ```
+  ![](.images/noisy.png)
+  ![](.images/smooth.png)
+
+  6. **Edge Detection**:
+    Edge detection refers to detecting the edges in an image. we can do that using sobel filter or laplacian filter or canny edge detection
+    for example :
+    we will use **canny edge detection** which is an edge detection algorithm that uses a multi-stage algorithm to detect a wide range of edges in images. This can be done by applying a canny edge detection formula or by using a built-in function in a library like OpenCV.
+
+  - Detect edges in an image using a formula:
+    ```python
+    image = cv2.Canny(image, threshold1, threshold2)
+    ```
+  ![](.images/edge.png)
+
+  7. **Image Segmentation**:
+    Image segmentation refers to dividing an image into multiple segments. This can be done by applying a segmentation techniques
+    for example :
+    we will use **K-means clustering** which is a clustering algorithm that divides the pixels of an image into clusters. 
+    
+  - Segment an image using a formula:
+    ```python
+    # reshape the image to a 2D array of pixels and 3 color values (RGB)
+    image = image.reshape((-1, 3))
+    # convert to np.float32
+    image = np.float32(image)
+    # define criteria, number of clusters(K) and apply kmeans()
+    criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
+    _, labels, centers = cv2.kmeans(image, K, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
+    # convert back to 8 bit values
+    centers = np.uint8(centers)
+    # flatten the labels array
+    labels = labels.flatten()
+    # convert all pixels to the color of the centroids
+    segmented_image = centers[labels.flatten()]
+    # reshape back to the original image dimension
+    segmented_image = segmented_image.reshape(image.shape)
+    ```
+    ![](.images/segment.png)
+
+    **I used this code to segment**
+    ```python
+    # image segmentation using k-means clustering with loop to find the best k
+    # read the image using opencv
+    img = cv2.imread('/kaggle/input/intel-image-classification/seg_test/seg_test/sea/20077.jpg')
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+    for k in range(2, 6):
+        # reshape the image to a 2D array of pixels and 3 color values (RGB)
+        pixel_vals = img.reshape((-1, 3))
+        # convert to float type
+        pixel_vals = np.float32(pixel_vals)
+
+        # define stopping criteria
+        criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 0.85)
+
+        # perform k-means clustering
+        ret, label, center = cv2.kmeans(pixel_vals, k, None, criteria, 10, cv2.KMEANS_RANDOM_CENTERS)
+
+        # convert data into 8-bit values
+        center = np.uint8(center)
+        res = center[label.flatten()]
+        res2 = res.reshape((img.shape))
+
+        # plot the image the two images
+        plt.subplot(2, 2, k-1)
+        plt.axis('off')
+        plt.imshow(res2)
+        plt.title('k = {}'.format(k))
+    plt.show()
+    ```
+    you can see the difference between the images with different
+
+  8. **Image rotation**:
+    Image rotation refers to rotating an image by a certain angle.
+
+  - Rotate an image using a formula:
+    ```python
+    # calculate the center of the image
+    center = (image.shape[1] / 2, image.shape[0] / 2)
+    # rotate the image by 90 degrees
+    M = cv2.getRotationMatrix2D(center, 90, 1.0)
+    # 90 is the angle of rotation
+    # 1.0 is the scale of rotation
+    rotated_image = cv2.warpAffine(image, M, (image.shape[1], image.shape[0]))
+    ```
+    ![](.images/90_center.png)
+    **OR**
+    ```python
+    # rotate the image by 90 degrees
+    rotated_image = cv2.rotate(image, cv2.ROTATE_90_CLOCKWISE)
+    # cv2.ROTATE_90_CLOCKWISE is the angle of rotation
+    # can be cv2.ROTATE_90_COUNTERCLOCKWISE or cv2.ROTATE_180 check the documentation
+    ```
+    ![](.images/90.png)
+
+  9. **Image flipping**:
+    Image flipping refers to flipping an image horizontally or vertically.
+
+  - Flip an image using a formula:
+    ```python
+    # flip the image horizontally
+    flipped_image = cv2.flip(image, 1)
+    # 1 is the code for flipping the image horizontally
+    # 0 is the code for flipping the image vertically
+    # -1 is the code for flipping the image both horizontally and vertically
+    ```
+    ![](.images/fli1.png)
+    ![](.images/fli0.png)
+    ![](.images/fli-1.png)
+
+  10. **Image translation**:
+    Image translation refers to shifting an image by a certain distance.
+
+  - Translate an image using a formula:
+    ```python
+    # translate the image by (25, 50) pixels
+    # 25 is the number of pixels to shift along the x-axis
+    # 50 is the number of pixels to shift along the y-axis
+    M = np.float32([[1, 0, 25], [0, 1, 50]]) # is the translation matrix used for shifting the image
+    translated_image = cv2.warpAffine(image, M, (image.shape[1], image.shape[0]))
+    # (image.shape[1], image.shape[0]) is the size of the output image
+    ```
+    ![](.images/trans.png)
+
+  11. **Saving an image**:
+    Saving an image refers to saving an image to a file.
+
+  - Save an image using a opencv function:
+    ```python
+    # save the image
+    cv2.imwrite('image.jpg', image)
+    # 'image.jpg' is the name of the file
+    # image is the image that we want to save
+    ```
+    **OR using matplotlib**
+    ```python
+    # save the image
+    plt.imsave('image.jpg', image)
+    # 'image.jpg' is the name of the file
+    # image is the image that we want to save
+    ```
+    **OR using PIL**
+    ```python
+    # save the image
+    image.save('image.jpg')
+    # 'image.jpg' is the name of the file
+    # image is the image that we want to save
+    ```
+
+    13. **Addtional tips**:
+      - **Read a folder of images**:
+        ```python
+        # read a folder of images
+        import os
+        for filename in os.listdir('folder_name'):
+            image = cv2.imread(os.path.join('folder_name', filename))
+            # do something with the image
+        ``` 
+      - **OR using glob**:
+          ```python
+          # read a folder of images
+          import glob
+          for filename in glob.glob('folder_name/*.jpg'):
+              image = cv2.imread(filename)
+              # do something with the image
+          ```
+      - **Read a video**:
+        ```python
+        # read a video
+        cap = cv2.VideoCapture('video.mp4')
+        while cap.isOpened():
+            ret, frame = cap.read()
+            # do something with the frame
+        ```
+      - **Read a webcam**:
+        ```python
+        # read a webcam
+        cap = cv2.VideoCapture(0)
+        while cap.isOpened():
+            ret, frame = cap.read()
+            # do something with the frame
+        ```
+      - **Read a video extract frames and save them**:
+        ```python
+        # read a video extract frames and save them
+        cap = cv2.VideoCapture('video.mp4')
+        count = 0
+        while cap.isOpened():
+            ret, frame = cap.read()
+            if ret:
+                cv2.imwrite('frame_{}.jpg'.format(count), frame)
+                count += 1
+            else:
+                break
+        ```
+      - **Get video information**:
+          ```python
+          # get video information
+          cap = cv2.VideoCapture('video.mp4')
+          width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
+          height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+          fps = cap.get(cv2.CAP_PROP_FPS)
+          frame_count = cap.get(cv2.CAP_PROP_FRAME_COUNT)
+          ```
+> **Tip:** Since images can take up a lot of memory, it's not practical to load all of them at once. To address this issue, packages like PyTorch and TensorFlow use generators to load images in batches. This approach is more efficient than loading all images simultaneously.
+
+- **Build custom dataset and dataset loader using Pytorch**
+The main use of the dataset class is to get the length of the dataset and to get the item at a specific index. The main use of the dataset loader is to load the data in batches.
+
+  1. **Build a custom dataset**:
+    ```python
+    # build a custom dataset
+    import torch
+    from torch.utils.data import Dataset
+    import pandas as pd
+    import os
+    from PIL import Image
+
+    class CustomDataset(Dataset):
+        def __init__(self, csv_file, root_dir, transform=None):
+            self.annotations = pd.read_csv(csv_file)
+            self.root_dir = root_dir
+            self.transform = transform
+
+        def __len__(self):
+            return len(self.annotations)
+
+        def __getitem__(self, index):
+            img_path = os.path.join(self.root_dir, self.annotations.iloc[index, 0])
+            image = Image.open(img_path)
+            y_label = torch.tensor(int(self.annotations.iloc[index, 1]))
+
+            if self.transform:
+                image = self.transform(image)
+
+            return (image, y_label)
+    ```
+    - **csv_file**: is the path to the csv file that contains the image names and their labels.
+    - **root_dir**: is the path to the folder that contains the images.
+    - **transform**: is the transformation that we want to apply to the images.
+
+  2. **Build a custom dataset loader**:
+    ```python
+    # build a custom dataset loader
+    from torch.utils.data import DataLoader
+    import torchvision.transforms as transforms
+
+    dataset = CustomDataset('data.csv', 'images/', transforms.ToTensor())
+    # 'data.csv' is the path to the csv file that contains the image names and their labels.
+    # 'images/' is the path to the folder that contains the images.
+    # transforms.ToTensor() is the transformation that we want to apply to the images.
+
+    dataloader = DataLoader(dataset, batch_size=32, shuffle=True)
+    # dataset is the dataset that we want to load
+    # batch_size is the number of images that we want to load in each batch
+    # shuffle is a boolean that indicates whether to shuffle the data or not
+    ```
+    - **dataset**: is the dataset that we want to load.
+    - **batch_size**: is the number of images that we want to load in each batch.
+    - **shuffle**: is a boolean that indicates whether to shuffle the data or
+    3. **Transform**
+    is the transformation that we want to apply to the images, this usually includes resizing, normalizing, and converting the images to tensors.
+    ```python
+    # transform
+    import torchvision.transforms as transforms
+
+    transform = transforms.Compose([
+        transforms.Resize((100, 100)),
+        transforms.ToTensor(),
+        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+    ])
+    # transforms.Resize((100, 100)) resize the image to 100x100
+    # transforms.ToTensor() convert the image to tensor
+    # transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)) normalize the image
+
+    ```
+    - **transforms.Resize((100, 100))**: resize the image to 100x100.
+    - **transforms.ToTensor()**: convert the image to tensor.
+    - **transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))**: normalize the image.
+
+- **Build custom dataset using TensorFlow**
+  1. **Build a custom dataset**:
+    ```python
+    # build a custom dataset
+    import tensorflow as tf
+    import pandas as pd
+    import os
+
+    class CustomDataset(tf.keras.utils.Sequence):
+        def __init__(self, csv_file, root_dir, batch_size=32, shuffle=True):
+            self.batch_size = batch_size
+            self.shuffle = shuffle
+            self.annotations = pd.read_csv(csv_file)
+            self.root_dir = root_dir
+            self.on_epoch_end()
+
+        def __len__(self):
+            return len(self.annotations) // self.batch_size
+
+        def __getitem__(self, index):
+            batch = self.indexes[index*self.batch_size:(index+1)*self.batch_size]
+            X, y = self.__data_generation(batch)
+            return X, y
+
+        def on_epoch_end(self):
+            self.indexes = np.arange(len(self.annotations))
+            if self.shuffle:
+                np.random.shuffle(self.indexes)
+
+        def __data_generation(self, batch):
+            X = []
+            y = []
+            for i in batch:
+                img_path = os.path.join(self.root_dir, self.annotations.iloc[i, 0])
+                image = cv2.imread(img_path)
+                image = cv2.resize(image, (100, 100))
+                X.append(image)
+                y.append(self.annotations.iloc[i, 1])
+            return np.array(X), np.array(y)
+    ```
+    - **csv_file**: is the path to the csv file that contains the image names and their labels.
+    - **root_dir**: is the path to the folder that contains the images.
+    - **batch_size**: is the number of images that we want to load in each batch.
+    - **shuffle**: is a boolean that indicates whether to shuffle the data or not.
+
+  2. **Build a custom dataset loader**:
+    ```python
+    # build a custom dataset loader
+    dataset = CustomDataset('data.csv', 'images/', batch_size=32, shuffle=True)
+    # 'data.csv' is the path to the csv file that contains the image names and their labels.
+    # 'images/' is the path to the folder that contains the images.
+    # batch_size is the number of images that we want to load in each batch
+    # shuffle is a boolean that indicates whether to shuffle the data or not
+    ```
+    - **dataset**: is the dataset that we want to load.
+
+> **Note**: The main difference between the Pytorch and TensorFlow dataset loaders is that the Pytorch dataset loader returns the images and their labels in a tuple, while the TensorFlow dataset loader returns the images and their labels in two separate arrays.
+
+> **Note**: you can do whatever you want in the `__data_generation` function, you can apply any transformation to the images, and you can also load the images from a different source. the same thing applies to the `__getitem__` function, you can return the images and their labels in any format you want.
+
+> **Reference**: from documentation of [Pytorch](https://pytorch.org/tutorials/beginner/data_loading_tutorial.html) , [TensorFlow](https://www.tensorflow.org/api_docs/python/tf/keras/utils/Sequence), and [opencv](https://docs.opencv.org/4.5.2/d6/d0f/group__dnn.html#ga29f34df9376379a603acd8df581ac8d7).
+          
