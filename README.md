@@ -1,5 +1,5 @@
 # Data_reprocessing
-** I have created a repository that covers approximately 98% of the preprocessing steps for any data, including a brief explanation of each step and example code to demonstrate how it is done.
+ I have created this repository that covers approximately 98% of the preprocessing steps for any data, including a brief explanation of each step and example code to demonstrate how it is done.
 
 I would like to emphasize two important points:
 
