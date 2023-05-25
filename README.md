@@ -155,24 +155,18 @@ The second stage involves considering the relationships between variables and id
        ```python
        import numpy as np
       from sklearn.decomposition import PCA
-
       # Assume 'data' is your cleaned_data from the previous stage (univariate outlier removal)
-
-       # Perform PCA
-     pca = PCA()
-    pca.fit(data)
-
-   # Calculate the Mahalanobis distance
-    mahalanobis_dist = pca.transform(data)
-
-    # Set a threshold for outlier detection (e.g., 3 standard deviations)
-    threshold = 3 * np.std(mahalanobis_dist)
-
-   # Identify outliers based on the Mahalanobis distance exceeding the threshold
-   outliers = np.where(np.abs(mahalanobis_dist) > threshold)
-
-     # Print the indices of the outlier data points
-     print("Indices of outliers:", outliers) 
+      # Perform PCA
+      pca = PCA()
+      pca.fit(data)
+      # Calculate the Mahalanobis distance
+      mahalanobis_dist = pca.transform(data)
+      # Set a threshold for outlier detection (e.g., 3 standard deviations)
+      threshold = 3 * np.std(mahalanobis_dist)
+      # Identify outliers based on the Mahalanobis distance exceeding the threshold
+      outliers = np.where(np.abs(mahalanobis_dist) > threshold)
+      # Print the indices of the outlier data points
+      print("Indices of outliers:", outliers) 
        ```
 15. **Imbalanced Data Handling**:
       
