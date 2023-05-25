@@ -172,7 +172,8 @@ threshold = 3 * np.std(mahalanobis_dist)
 outliers = np.where(np.abs(mahalanobis_dist) > threshold)
 
 # Print the indices of the outlier data points
-print("Indices of outliers:", outliers) ```
+print("Indices of outliers:", outliers) 
+```
 15. **Imbalanced Data Handling**:
       
 Imbalanced data handling refers to addressing the issue of imbalanced class distribution in a dataset, where one class has significantly more or fewer instances than the others. Techniques for handling imbalanced data include resampling methods such as oversampling (increasing the minority class samples) or undersampling (reducing the majority class samples), using different performance metrics like F1-score or area under the receiver operating characteristic curve (AUC-ROC) to evaluate model performance, applying algorithmic approaches like cost-sensitive learning or ensemble methods, or utilizing synthetic data generation techniques such as SMOTE (Synthetic Minority Over-sampling Technique) to balance the class distribution and improve the performance of machine learning models
