@@ -154,26 +154,26 @@ The first stage involves detecting outliers in each variable individually, witho
 The second stage involves considering the relationships between variables and identifying outliers based on their collective behavior. PCA is a dimensionality reduction technique that can also be used for outlier detection. By transforming the data into a new set of uncorrelated variables (principal components), PCA can help identify outliers that deviate significantly from the overall patterns observed in the dataset. The outliers detected at this stage may capture more complex interactions and dependencies between variables.
        ```python
        import numpy as np
-from sklearn.decomposition import PCA
+      from sklearn.decomposition import PCA
 
-# Assume 'data' is your cleaned_data from the previous stage (univariate outlier removal)
+      # Assume 'data' is your cleaned_data from the previous stage (univariate outlier removal)
 
-# Perform PCA
-pca = PCA()
-pca.fit(data)
+       # Perform PCA
+     pca = PCA()
+    pca.fit(data)
 
-# Calculate the Mahalanobis distance
-mahalanobis_dist = pca.transform(data)
+   # Calculate the Mahalanobis distance
+    mahalanobis_dist = pca.transform(data)
 
-# Set a threshold for outlier detection (e.g., 3 standard deviations)
-threshold = 3 * np.std(mahalanobis_dist)
+    # Set a threshold for outlier detection (e.g., 3 standard deviations)
+    threshold = 3 * np.std(mahalanobis_dist)
 
-# Identify outliers based on the Mahalanobis distance exceeding the threshold
-outliers = np.where(np.abs(mahalanobis_dist) > threshold)
+   # Identify outliers based on the Mahalanobis distance exceeding the threshold
+   outliers = np.where(np.abs(mahalanobis_dist) > threshold)
 
-# Print the indices of the outlier data points
-print("Indices of outliers:", outliers) 
-     ```
+     # Print the indices of the outlier data points
+     print("Indices of outliers:", outliers) 
+       ```
 15. **Imbalanced Data Handling**:
       
 Imbalanced data handling refers to addressing the issue of imbalanced class distribution in a dataset, where one class has significantly more or fewer instances than the others. Techniques for handling imbalanced data include resampling methods such as oversampling (increasing the minority class samples) or undersampling (reducing the majority class samples), using different performance metrics like F1-score or area under the receiver operating characteristic curve (AUC-ROC) to evaluate model performance, applying algorithmic approaches like cost-sensitive learning or ensemble methods, or utilizing synthetic data generation techniques such as SMOTE (Synthetic Minority Over-sampling Technique) to balance the class distribution and improve the performance of machine learning models
